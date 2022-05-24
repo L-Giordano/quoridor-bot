@@ -1,12 +1,9 @@
 import json
-import sys
 import logging
 import websockets
 import asyncio
-
 from utils.response_formatter import format_action_challenge
-
-
+from player.player import play
 
 class Client:
 
@@ -68,18 +65,19 @@ class Client:
                     
                     logging.info(f'challenged by ' + request_data['data']['opponent'])
 
-                    await self.send(websocket,
-                        format_action_challenge(request_data)
-                        )
-                    logging.info('challenge accepted')
+                    if request_data['data']['opponent']=='lgior':
+                        await self.send(websocket,
+                            format_action_challenge(request_data)
+                            )
+                        logging.info('challenge accepted')
+                    else:
+                        pass
                     
                 if request_data['event'] == 'your_turn':
-                    pass
-                  
-                    # response = await player.play(request_data)
-                    # await self.send(websocket,response)
-                        
-                   
+                                      
+                    response = await play(request_data)
+                    await self.send(websocket,response)
+                                
             except Exception as e:
-                logging.info(e)
+                print(e, e.with_traceback, e.args)
 

@@ -12,6 +12,8 @@ def format_action_your_turn(request_data,response):
                 "to_col": response['data']["to_col"]
                     }
             }
+
+  
     if response["action"]=='wall':
         msg={
             "action": "wall", 
