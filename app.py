@@ -2,11 +2,10 @@ import sys
 import asyncio
 import logging
 
-from ws_client.ws_client import Client
+from client.ws_client import Client
 
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
-
 
 
 if __name__ == '__main__':

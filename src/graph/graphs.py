@@ -3,14 +3,20 @@ from networkx.classes import Graph
 import numpy as np
 
 class Q_graph(Graph):
-    def __init__(self, board, opp,data=None, val=None, **attr):
+    def __init__(self,data=None, val=None, **attr):
 
         super(Q_graph, self).__init__()
         self.val = val
         self.is_built = True      
-        self.board=board
+              
+    def set_opp(self,opp):
         self.opp=opp
-        self.add_edges_from(self.add_edges())
+
+    def set_board(self,board):
+        self.board=board
+
+    def create_graph(self):
+        self.add_edges_from(self.add_edges())   
 
     def add_edges(self):
 
@@ -65,7 +71,6 @@ class Q_graph(Graph):
             return vertex
 
         return vertex
-
 
     def f_north_orth_vt(self,row,col):
 
@@ -185,12 +190,12 @@ class Q_graph(Graph):
 
         lper=row+2 #diagonal landing pawn row to the east
         lpec=col+2 #diagonal landing pawn row to the east
-        dwer=row+1 #diagonal wall row to the east
+        dwer=row+2 #diagonal wall row to the east
         dwec=col+1 #diagonal wall col to the east
         
         lpwr=row+2 #diagonal landing pawn row to the west
         lpwc=col-2 #diagonal landing pawn row to the west
-        dwwr=row+1 #diagonal wall row to the west
+        dwwr=row+2 #diagonal wall row to the west
         dwwc=col-1 #diagonal wall col to the west
 
         if((row<len(self.board)-3) #prevents opp in the last row
@@ -228,12 +233,12 @@ class Q_graph(Graph):
 
         lper=row-2 #diagonal landing pawn row to the east
         lpec=col+2 #diagonal landing pawn row to the east
-        dwer=row-1 #diagonal wall row to the east
+        dwer=row-2 #diagonal wall row to the east
         dwec=col+1 #diagonal wall col to the east
         
         lpwr=row-2 #diagonal landing pawn row to the west
         lpwc=col-2 #diagonal landing pawn row to the west
-        dwwr=row-1 #diagonal wall row to the west
+        dwwr=row-2 #diagonal wall row to the west
         dwwc=col-1 #diagonal wall col to the west
 
         if((row>2) #prevents opp in the last row
@@ -272,12 +277,12 @@ class Q_graph(Graph):
         lpsr=row+2 #diagonal landing pawn row to the south
         lpsc=col+2 #diagonal landing pawn row to the south
         dwsr=row+1 #diagonal wall row to the south
-        dwsc=col+1 #diagonal wall col to the south
+        dwsc=col+2 #diagonal wall col to the south
         
         lpnr=row-2 #diagonal landing pawn row to the north
         lpnc=col+2 #diagonal landing pawn row to the north
         dwnr=row-1 #diagonal wall row to the north
-        dwnc=col+1 #diagonal wall col to the north
+        dwnc=col+2 #diagonal wall col to the north
 
         if((col<len(self.board)-3) #prevents opp in the last row
             and(lpsr<=len(self.board)-1) #prevents out of bounds to the south
@@ -315,12 +320,12 @@ class Q_graph(Graph):
         lpsr=row+2 #diagonal landing pawn row to the south
         lpsc=col-2 #diagonal landing pawn row to the south
         dwsr=row+1 #diagonal wall row to the south
-        dwsc=col-1 #diagonal wall col to the south
+        dwsc=col-2 #diagonal wall col to the south
         
         lpnr=row-2 #diagonal landing pawn row to the north
         lpnc=col-2 #diagonal landing pawn row to the north
         dwnr=row-1 #diagonal wall row to the north
-        dwnc=col-1 #diagonal wall col to the north
+        dwnc=col-2 #diagonal wall col to the north
 
         if((col>2) #prevents opp in the last row
             and(lpsr<=len(self.board)-1) #prevents out of bounds to the south
@@ -355,12 +360,5 @@ class Q_graph(Graph):
 # board=str_board_to_matrix('  N| | |                             |S| |         - -     - -            N  |                 - -             |                     - -                                       |N   S|                           |  S  |         - -   - -                                 - -                   ')
 
 
-
-# gr=Q_graph(board,'n')
-
-# lista=list(gr.nodes)
-
-# for i in range(len(lista)):
-#     print('node ',lista[i])
-#     print(list(gr.neighbors(lista[i])))
+# print(board)
 

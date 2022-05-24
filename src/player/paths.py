@@ -1,7 +1,5 @@
-import random
-import time
 import networkx as nx
-from graphs.graphs import Q_graph
+
 
 def f_paths(player_data,opp_data):
 
@@ -31,7 +29,7 @@ def calc_path(player_data):
             try:
                 paths.append(list(nx.astar_path(q_graph,player_pos[i], goal_pos[j], weight=1)))
             except Exception as e:
-                print('aca ',e)
+
                 pass
     return paths 
     

@@ -2,8 +2,8 @@ import json
 import logging
 import websockets
 import asyncio
-from utils.response_formatter import format_action_challenge
-from player.player import play
+from src.utils.response_formatter import format_action_challenge
+from src.player.player import play
 
 class Client:
 
@@ -65,7 +65,7 @@ class Client:
                     
                     logging.info(f'challenged by ' + request_data['data']['opponent'])
 
-                    if request_data['data']['opponent']=='lgior':
+                    if request_data['data']['opponent']!='':
                         await self.send(websocket,
                             format_action_challenge(request_data)
                             )

@@ -1,11 +1,11 @@
 
 import copy
 import numpy as np
-from player.paths import f_paths
-from utils.response_formatter import format_action_your_turn
-from graphs.graphs import Q_graph
-from player.wall import create_wall
-from utils.board_printer import board_printer
+from src.player.paths import f_paths
+from src.utils.response_formatter import format_action_your_turn
+from src.graph.graphs import Q_graph
+from src.player.wall import create_wall
+from src.utils.board_printer import board_printer
 
 async def play(request_data):
 
@@ -60,12 +60,17 @@ def player_data(request_data,player,board):
 
     opp_side='N' if side=='S' else 'S'
 
+    q_graph=Q_graph()
+    q_graph.set_board(board)
+    q_graph.set_opp(opp_side)
+    q_graph.create_graph()
+
     return{
         'side': side,
         'opp_side':'N' if side=='S' else 'N',
         'player_pos':pawns_pos(board, side),
         'player_goal_pos':goal_positions(board,side),
-        'q_graph':Q_graph(board,opp_side)
+        'q_graph':q_graph
     }
 
 def select_play(all_paths, request_data,o_data,p_data):
