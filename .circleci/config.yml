@@ -22,6 +22,6 @@ jobs:
           command: coverage run -m unittest discover
 
 workflows:
-  sample: 'dev quoridor-bot'
+  dev-quoridor-bot: 
     jobs:
       - build-and-test
