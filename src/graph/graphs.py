@@ -40,7 +40,7 @@ class Q_graph(Graph):
     def f_south_orth_vt(self,row,col):
         
         vertex=[]
-
+ 
         wr=row+1 #wall row      
         wc=col #wall col    
         lr=row+2 #pawn row 
@@ -348,17 +348,4 @@ class Q_graph(Graph):
             vertex.append(((row//2,col//2),(lpnr//2,lpnc//2)))
 
         return vertex
-
-
-
-
-# def str_board_to_matrix(str_board):    
-#     matrix = np.array(list(str_board), dtype=str)
-#     matrix = matrix.reshape(17,17)
-#     return matrix
-
-# board=str_board_to_matrix('  N| | |                             |S| |         - -     - -            N  |                 - -             |                     - -                                       |N   S|                           |  S  |         - -   - -                                 - -                   ')
-
-
-# print(board)
 

@@ -8,6 +8,7 @@ websockets = "*"
 numpy = "*"
 networkx = "*"
 coverage = "==6.4"
+flake8 = "*"
 
 [dev-packages]
 

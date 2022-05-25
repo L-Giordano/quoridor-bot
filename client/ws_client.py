@@ -65,7 +65,7 @@ class Client:
                     
                     logging.info(f'challenged by ' + request_data['data']['opponent'])
 
-                    if request_data['data']['opponent']!='':
+                    if request_data['data']['opponent']!=' ':
                         await self.send(websocket,
                             format_action_challenge(request_data)
                             )
