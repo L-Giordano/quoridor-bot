@@ -1,8 +1,5 @@
 import unittest
-
 from test import test_qgraph
-
-
 
 
 def create_suite(module):
@@ -16,6 +13,7 @@ def create_suite_pack():
     suite_list.append(create_suite(test_qgraph))
 
     return suite_list
+
 
 if __name__ == '__main__':
     suite_pack = unittest.TestSuite(create_suite_pack())

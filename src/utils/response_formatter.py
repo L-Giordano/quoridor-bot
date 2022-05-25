@@ -1,7 +1,7 @@
 
-def format_action_your_turn(request_data,response):
-    if response["action"]=='move':
-        msg={
+def format_action_your_turn(request_data, response):
+    if response["action"] == 'move':
+        msg = {
             "action": "move",
             "data": {
                 "game_id": request_data['data']['game_id'],
@@ -13,11 +13,10 @@ def format_action_your_turn(request_data,response):
                     }
             }
 
-  
-    if response["action"]=='wall':
-        msg={
-            "action": "wall", 
-            "data":{
+    if response["action"] == 'wall':
+        msg = {
+            "action": "wall",
+            "data": {
                 "game_id": request_data['data']['game_id'],
                 "turn_token": request_data['data']['turn_token'],
                 "row": response['data']["row"],
@@ -27,9 +26,10 @@ def format_action_your_turn(request_data,response):
             }
     return msg
 
+
 def format_action_challenge(request_data):
-    msg={
-        "action":'accept_challenge',
+    msg = {
+        "action": 'accept_challenge',
         "data": {
                 "challenge_id": request_data['data']["challenge_id"]
                 }
