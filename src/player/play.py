@@ -19,9 +19,6 @@ async def play(request_data):
     scored_own_paths = paths.path_score(own_paths, own_player.side)
     scored_opp_paths = paths.path_score(opp_paths, opp_player.side)
 
-    # own_paths = paths.Paths(own_player)
-    # opp_paths = paths.Paths(opp_player)
-
     # player and opp best paths sorted by lower score
     # add and sort the player and the opp scores
     all_scores = scored_own_paths + scored_opp_paths
