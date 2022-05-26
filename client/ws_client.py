@@ -29,10 +29,10 @@ class Client:
                     conn_resp = await asyncio.wait_for(websocket.recv(), timeout=3)  # noqa: E501
                     json_conn_resp = json.loads(conn_resp)
                     logging.info('connected to the server')
-                    print('connected users:')
-                    print('-----------------')
+                    logging.info('connected users:')
+                    logging.info('-----------------')
                     for i in range(len(json_conn_resp['data']['users'])):
-                        print('*', json_conn_resp['data']['users'][i])
+                        logging.info('*%s', json_conn_resp['data']['users'][i])
 
                     await self.recive(websocket)
 
@@ -52,7 +52,7 @@ class Client:
                 if request_data['event'] == 'list_users':
                     logging.info('connected users(UPDATE):')
                     for i in range(len(request_data['data']['users'])):
-                        print('*', request_data['data']['users'][i])
+                        logging.info('*s%', request_data['data']['users'][i])
 
                 if request_data['event'] == 'gameover':
                     pass
@@ -74,4 +74,4 @@ class Client:
                     await self.send(websocket, response)
 
             except Exception as e:
-                print(e, e.with_traceback, e.args)
+                logging.exception(e, e.with_traceback)

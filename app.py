@@ -15,7 +15,6 @@ if __name__ == '__main__':
             asyncio.get_event_loop().run_until_complete(client.start())
             client.start()
         except KeyboardInterrupt:
-            print()
             logging.info('Exiting...')
         except asyncio.TimeoutError as e:
             logging.error('error {}'.format(str(e)))

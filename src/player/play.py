@@ -9,10 +9,9 @@ from src.utils.board_printer import board_printer
 async def play(request_data):
 
     board_printer(request_data)
-    # print(1)
+
     own_player = player.Player(request_data, request_data['data']['side'])
     opp_player = player.Player(request_data, 'S' if request_data['data']['side'] == 'N' else 'N')  # noqa: E501
-    # print(2)
 
     own_paths = paths.calc_path(own_player)
     opp_paths = paths.calc_path(opp_player)
@@ -22,14 +21,14 @@ async def play(request_data):
 
     # own_paths = paths.Paths(own_player)
     # opp_paths = paths.Paths(opp_player)
-    # print(3)
+
     # player and opp best paths sorted by lower score
     # add and sort the player and the opp scores
     all_scores = scored_own_paths + scored_opp_paths
     all_scores.sort(key=lambda path: path['score'])
-    # print(4)
+
     selected_play = select_play(all_scores, request_data, own_player, opp_player)  # noqa: E501
-    # print(5)
+
     # format the response before send it
     response = format_action_your_turn(request_data, selected_play)
 

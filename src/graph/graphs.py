@@ -21,6 +21,7 @@ class Q_graph(Graph):
         vertex = []
         for i in range(9):
             for j in range(9):
+                # interpolates a 9x9 board to a 16x16 board
                 row = i*2
                 col = j*2
 
