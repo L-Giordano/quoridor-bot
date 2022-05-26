@@ -1,5 +1,5 @@
 import unittest
-from test import test_qgraph
+from test import test_paths, test_player, test_qgraph
 
 
 def create_suite(module):
@@ -11,6 +11,8 @@ def create_suite(module):
 def create_suite_pack():
     suite_list = []
     suite_list.append(create_suite(test_qgraph))
+    suite_list.append(create_suite(test_player))
+    suite_list.append(create_suite(test_paths))
 
     return suite_list
 

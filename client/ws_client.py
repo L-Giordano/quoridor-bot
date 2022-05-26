@@ -3,7 +3,7 @@ import logging
 import websockets
 import asyncio
 from src.utils.response_formatter import format_action_challenge
-from src.player.player import play
+from src.player import play
 
 
 class Client:
@@ -61,7 +61,7 @@ class Client:
 
                     logging.info('challenged by ' + request_data['data']['opponent']) # noqa
 
-                    if request_data['data']['opponent'] != ' ':
+                    if request_data['data']['opponent'] == 'lgior':
                         await self.send(websocket,
                                         format_action_challenge(request_data))
                         logging.info('challenge accepted')
@@ -70,7 +70,7 @@ class Client:
 
                 if request_data['event'] == 'your_turn':
 
-                    response = await play(request_data)
+                    response = await play.play(request_data)
                     await self.send(websocket, response)
 
             except Exception as e:

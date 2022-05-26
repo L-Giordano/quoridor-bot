@@ -1,111 +1,46 @@
-
-import copy
 import numpy as np
-from src.player.paths import f_paths
-from src.utils.response_formatter import format_action_your_turn
-from src.graph.graphs import Q_graph
-from src.player.wall import create_wall
-from src.utils.board_printer import board_printer
+from src.graph import graphs
 
 
-async def play(request_data):
+class Player():
+    def __init__(self, request_data, player):
+        self.request_data = request_data
+        self.player = player
+        self.side = 'S' if self.player == 'S' else 'N'
+        self.opp_side = 'S' if self.side == 'N' else 'N'
+        self.matrix_board = self.str_board_to_matrix(request_data['data']['board'])  # noqa: E501
+        self.pawn_pos = self.find_pawns_pos(self.matrix_board, self.side)
+        self.goal_pos = self.find_goal_pos(self.matrix_board, self.side)
+        self.graph = self.create_q_graph(self.opp_side, self.matrix_board)
 
-    board_printer(request_data)
+    @staticmethod
+    def str_board_to_matrix(str_board):
+        matrix_board = np.array(list(str_board), dtype=str)
+        matrix_board = matrix_board.reshape(17, 17)
+        return matrix_board
 
-    matrix_board = str_board_to_matrix(request_data['data']['board'])
+    def find_pawns_pos(self, matrix_board, side):
+        pawn_positions = []
+        for i in range(9):
+            for j in range(9):
+                if matrix_board[i * 2][j * 2] == side:
+                    pawn_positions.append((i, j))
 
-    p_data = player_data(request_data, 'player', matrix_board)
-    o_data = player_data(request_data, 'opp', matrix_board)
+        return pawn_positions
 
-    all_paths = f_paths(p_data, o_data)
+    def find_goal_pos(self, matrix_board, side):
+        goal_row = 16 if side == 'N' else 0
+        goal_positions = []
+        for i in range(9):
+            if matrix_board[goal_row][i*2] == " ":
+                goal_positions.append((goal_row//2, i))
+        return goal_positions
 
-    selected_play = select_play(all_paths, request_data, o_data, p_data)
+    def create_q_graph(self, o_side, matrix_board):
 
-    response = format_action_your_turn(request_data, selected_play)
+        q_graph = graphs.Q_graph()
+        q_graph.set_board(matrix_board)
+        q_graph.set_opp(o_side)
+        q_graph.create_graph()
 
-    return response
-
-
-def str_board_to_matrix(str_board):
-    matrix = np.array(list(str_board), dtype=str)
-    matrix = matrix.reshape(17, 17)
-    return matrix
-
-
-def pawns_pos(board, side):
-    positions = []
-    for i in range(9):
-        for j in range(9):
-            if board[i * 2][j * 2] == side:
-                positions.append((i, j))
-
-    return positions
-
-
-def goal_positions(board, side):
-    goal_row = 16 if side == 'N' else 0
-    goal_pos = []
-    for i in range(9):
-        if board[goal_row][i*2] == " ":
-            goal_pos.append((goal_row//2, i))
-    return goal_pos
-
-
-def player_data(request_data, player, board):
-
-    side = None
-
-    if player == 'player':
-        side = request_data['data']['side']
-    else:
-        side = 'N' if request_data['data']['side'] == 'S' else 'S'
-
-    opp_side = 'N' if side == 'S' else 'S'
-
-    q_graph = Q_graph()
-    q_graph.set_board(board)
-    q_graph.set_opp(opp_side)
-    q_graph.create_graph()
-
-    return{
-        'side': side,
-        'opp_side': 'N' if side == 'S' else 'N',
-        'player_pos': pawns_pos(board, side),
-        'player_goal_pos': goal_positions(board, side),
-        'q_graph': q_graph
-    }
-
-
-def select_play(all_paths, request_data, o_data, p_data):
-
-    for i in range(len(all_paths)):
-
-        if ((all_paths[i]['player'] != request_data['data']['side'])
-                and (request_data['data']['remaining_moves'] > 0)):
-
-            o_wall_graph = copy.deepcopy(o_data['q_graph'])
-            p_wall_graph = copy.deepcopy(p_data['q_graph'])
-
-            wall = create_wall(all_paths[i]['data'], o_wall_graph, p_wall_graph, o_data, p_data)  # noqa: E501
-
-            if (wall is None):
-                continue
-            else:
-                return {
-                    'action': 'wall',
-                    'data': {
-                        'row': wall[1],
-                        'col': wall[2],
-                        'orientation': wall[0]
-                    }
-                }
-        else:
-            return {
-                'action': 'move',
-                'data': {
-                    'from_row': all_paths[i]['data']['from_row'],
-                    'from_col': all_paths[i]['data']['from_col'],
-                    'to_row': all_paths[i]['data']['to_row'],
-                    'to_col': all_paths[i]['data']['to_col']
-                }
-            }
+        return q_graph

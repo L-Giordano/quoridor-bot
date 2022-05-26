@@ -24,20 +24,19 @@ class Q_graph(Graph):
                 row = i*2
                 col = j*2
 
-                vertex += self.f_south_orth_vt(row, col)
-                vertex += self.f_north_orth_vt(row, col)
-                vertex += self.f_east_orth_vt(row, col)
-                vertex += self.f_west_orth_vt(row, col)
-                vertex += self.f_south_diag_vt(row, col)
-                vertex += self.f_north_diag_vt(row, col)
-                vertex += self.f_east_diag_vt(row, col)
-                vertex += self.f_west_diag_vt(row, col)
+                vertex += self.f_south_orth_vt(row, col, self.board, self.opp)
+                vertex += self.f_north_orth_vt(row, col, self.board, self.opp)
+                vertex += self.f_east_orth_vt(row, col, self.board, self.opp)
+                vertex += self.f_west_orth_vt(row, col, self.board, self.opp)
+                vertex += self.f_south_diag_vt(row, col, self.board, self.opp)
+                vertex += self.f_north_diag_vt(row, col, self.board, self.opp)
+                vertex += self.f_east_diag_vt(row, col, self.board, self.opp)
+                vertex += self.f_west_diag_vt(row, col, self.board, self.opp)
 
         return vertex
 
-    def f_south_orth_vt(self, row, col):
+    def f_south_orth_vt(self, row, col, board, opp):
         vertex = []
-
         wr = row + 1  # wall row
         wc = col  # wall col
         lr = row + 2  # pawn row
@@ -47,29 +46,29 @@ class Q_graph(Graph):
         nlr = row + 4  # next pawn row
         nlc = col  # next pawn col
 
-        if ((row > len(self.board) - 3) or  # prevents out of bounds to the south # noqa: E501
-            (self.board[row][col] == self.opp) or
-                (self.board[wr][wc] == '-')):  # prevents blocked cell
+        if ((row > len(board) - 3) or  # prevents out of bounds to the south # noqa: E501
+            (board[row][col] == opp) or
+                (board[wr][wc] == '-')):  # prevents blocked cell
 
             return vertex
 
-        if (self.board[lr][lc] == ' '):  # landing cell is empty
+        if (board[lr][lc] == ' '):  # landing cell is empty
 
             vertex.append(((row // 2, col // 2), (lr // 2, lc // 2)))
             return vertex
 
         # jumpping opp pawn
-        if ((self.board[lr][lc] == self.opp) and  # landding cell occupied
-            (nlr <= len(self.board) - 1) and  # prevents jump landing out of bounds # noqa: E501
-            (self.board[nwr][nwc] == ' ') and  # no blocked new landing cell
-                (self.board[nlr][nlc] == ' ')):  # empty landing cell
+        if ((board[lr][lc] == opp) and  # landding cell occupied
+            (nlr <= len(board) - 1) and  # prevents jump landing out of bounds # noqa: E501
+            (board[nwr][nwc] == ' ') and  # no blocked new landing cell
+                (board[nlr][nlc] == ' ')):  # empty landing cell
 
             vertex.append(((row // 2, col // 2), (nlr // 2, nlc // 2)))
             return vertex
 
         return vertex
 
-    def f_north_orth_vt(self, row, col):
+    def f_north_orth_vt(self, row, col, board, opp):
 
         vertex = []
 
@@ -83,28 +82,28 @@ class Q_graph(Graph):
         nlc = col  # next pawn col
 
         if ((row < 2) or  # prevents out of bounds to the north
-            (self.board[row][col] == self.opp) or
-                (self.board[wr][wc] == '-')):  # prevents blocked cell
+            (board[row][col] == opp) or
+                (board[wr][wc] == '-')):  # prevents blocked cell
 
             return vertex
 
-        if (self.board[lr][lc] == ' '):  # landing cell is empty
+        if (board[lr][lc] == ' '):  # landing cell is empty
 
             vertex.append(((row // 2, col // 2), (lr // 2, lc // 2)))
             return vertex
 
         # jumpping opp pawn
-        if ((self.board[lr][lc] == self.opp) and  # landding cell occupied
+        if ((board[lr][lc] == opp) and  # landding cell occupied
             (nlr >= 0) and  # prevents jump landing out of bounds
-            (self.board[nwr][nwc] == ' ') and  # no blocked new landing cell
-                (self.board[nlr][nlc] == ' ')):  # empty landing cell
+            (board[nwr][nwc] == ' ') and  # no blocked new landing cell
+                (board[nlr][nlc] == ' ')):  # empty landing cell
 
             vertex.append(((row // 2, col // 2), (nlr // 2, nlc // 2)))
             return vertex
 
         return vertex
 
-    def f_east_orth_vt(self, row, col):
+    def f_east_orth_vt(self, row, col, board, opp):
 
         vertex = []
 
@@ -117,29 +116,29 @@ class Q_graph(Graph):
         nlr = row  # next pawn row
         nlc = col + 4  # next pawn col
 
-        if ((col > len(self.board) - 3)  # prevents out of bounds to the east
-            or (self.board[row][col] == self.opp)
-                or (self.board[wr][wc] == '|')):  # prevents blocked cell
+        if ((col > len(board) - 3)  # prevents out of bounds to the east
+            or (board[row][col] == opp)
+                or (board[wr][wc] == '|')):  # prevents blocked cell
 
             return vertex
 
-        if (self.board[lr][lc] == ' '):  # landing cell is empty
+        if (board[lr][lc] == ' '):  # landing cell is empty
 
             vertex.append(((row // 2, col // 2), (lr // 2, lc // 2)))
             return vertex
 
         # jumpping opp pawn
-        if ((self.board[lr][lc] == self.opp)  # landding cell occupied
-            and (nlc <= len(self.board) - 1)  # prevents jump landing out of bounds # noqa: E501
-            and (self.board[nwr][nwc] == ' ')  # no blocked new landing cell
-                and (self.board[nlr][nlc] == ' ')):  # empty landing cell
+        if ((board[lr][lc] == opp)  # landding cell occupied
+            and (nlc <= len(board) - 1)  # prevents jump landing out of bounds # noqa: E501
+            and (board[nwr][nwc] == ' ')  # no blocked new landing cell
+                and (board[nlr][nlc] == ' ')):  # empty landing cell
 
             vertex.append(((row // 2, col // 2), (nlr // 2, nlc // 2)))
             return vertex
 
         return vertex
 
-    def f_west_orth_vt(self, row, col):
+    def f_west_orth_vt(self, row, col, board, opp):
 
         vertex = []
 
@@ -153,28 +152,28 @@ class Q_graph(Graph):
         nlc = col - 4  # next pawn col
 
         if ((col < 2)  # prevents out of bounds to the west
-            or (self.board[row][col] == self.opp)
-                or (self.board[wr][wc] == '|')):  # prevents blocked cell
+            or (board[row][col] == opp)
+                or (board[wr][wc] == '|')):  # prevents blocked cell
 
             return vertex
 
-        if (self.board[lr][lc] == ' '):  # landing cell is empty
+        if (board[lr][lc] == ' '):  # landing cell is empty
 
             vertex.append(((row // 2, col // 2), (lr // 2, lc // 2)))
             return vertex
 
         # jumpping opp pawn
-        if ((self.board[lr][lc] == self.opp)  # landding cell occupied
+        if ((board[lr][lc] == opp)  # landding cell occupied
             and (nlc >= 0)  # prevents jump landing out of bounds
-            and (self.board[nwr][nwc] == ' ')  # no blocked new landing cell
-                and (self.board[nlr][nlc] == ' ')):  # empty landing cell
+            and (board[nwr][nwc] == ' ')  # no blocked new landing cell
+                and (board[nlr][nlc] == ' ')):  # empty landing cell
 
             vertex.append(((row // 2, col // 2), (nlr // 2, nlc // 2)))
             return vertex
 
         return vertex
 
-    def f_south_diag_vt(self, row, col):
+    def f_south_diag_vt(self, row, col, board, opp):
 
         vertex = []
 
@@ -195,29 +194,29 @@ class Q_graph(Graph):
         dwwr = row + 2  # diagonal wall row to the west
         dwwc = col - 1  # diagonal wall col to the west
 
-        if((row < len(self.board) - 3)  # prevents opp in the last row
-            and (lpec <= len(self.board) - 1)  # prevents out of bounds to the east # noqa: E501
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '-')  # wall behind opp pawn
-            and (self.board[dwer][dwec] == ' ')  # no blocked diagonal
-                and (self.board[lper][lpec] == ' ')):  # free landing cell
+        if((row < len(board) - 3)  # prevents opp in the last row
+            and (lpec <= len(board) - 1)  # prevents out of bounds to the east # noqa: E501
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '-')  # wall behind opp pawn
+            and (board[dwer][dwec] == ' ')  # no blocked diagonal
+                and (board[lper][lpec] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lper // 2, lpec // 2)))
 
-        if((row < len(self.board) - 3)  # prevents opp in the last row
+        if((row < len(board) - 3)  # prevents opp in the last row
             and (lpwc >= 0)  # prevents out of bounds to the west
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '-')  # wall behind opp pawn
-            and (self.board[dwwr][dwwc] == ' ')  # no blocked diagonal
-                and (self.board[lpwr][lpwc] == ' ')):  # free landing cell
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '-')  # wall behind opp pawn
+            and (board[dwwr][dwwc] == ' ')  # no blocked diagonal
+                and (board[lpwr][lpwc] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lpwr // 2, lpwc // 2)))
 
         return vertex
 
-    def f_north_diag_vt(self, row, col):
+    def f_north_diag_vt(self, row, col, board, opp):
 
         vertex = []
 
@@ -239,28 +238,28 @@ class Q_graph(Graph):
         dwwc = col - 1  # diagonal wall col to the west
 
         if((row > 2)  # prevents opp in the last row
-            and (lpec <= len(self.board) - 1)  # prevents out of bounds to the east # noqa: E501
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '-')  # wall behind opp pawn
-            and (self.board[dwer][dwec] == ' ')  # no blocked diagonal
-                and (self.board[lper][lpec] == ' ')):  # free landing cell
+            and (lpec <= len(board) - 1)  # prevents out of bounds to the east # noqa: E501
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '-')  # wall behind opp pawn
+            and (board[dwer][dwec] == ' ')  # no blocked diagonal
+                and (board[lper][lpec] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lper // 2, lpec // 2)))
 
         if((row > 2)  # prevents opp in the last row
             and (lpwc >= 0)  # prevents out of bounds to the west
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '-')  # wall behind opp pawn
-            and (self.board[dwwr][dwwc] == ' ')  # no blocked diagonal
-                and (self.board[lpwr][lpwc] == ' ')):  # free landing cell
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '-')  # wall behind opp pawn
+            and (board[dwwr][dwwc] == ' ')  # no blocked diagonal
+                and (board[lpwr][lpwc] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lpwr // 2, lpwc // 2)))
 
         return vertex
 
-    def f_east_diag_vt(self, row, col):
+    def f_east_diag_vt(self, row, col, board, opp):
 
         vertex = []
 
@@ -281,29 +280,29 @@ class Q_graph(Graph):
         dwnr = row - 1  # diagonal wall row to the north
         dwnc = col + 2  # diagonal wall col to the north
 
-        if((col < len(self.board) - 3)  # prevents opp in the last row
-            and (lpsr <= len(self.board) - 1)  # prevents out of bounds to the south # noqa: E501
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '|')  # wall behind opp pawn
-            and (self.board[dwsr][dwsc] == ' ')  # no blocked diagonal
-                and (self.board[lpsr][lpsc] == ' ')):  # free landing cell
+        if((col < len(board) - 3)  # prevents opp in the last row
+            and (lpsr <= len(board) - 1)  # prevents out of bounds to the south # noqa: E501
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '|')  # wall behind opp pawn
+            and (board[dwsr][dwsc] == ' ')  # no blocked diagonal
+                and (board[lpsr][lpsc] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lpsr // 2, lpsc // 2)))
 
-        if((col < len(self.board) - 3)  # prevents opp in the last row
+        if((col < len(board) - 3)  # prevents opp in the last row
             and (lpnr >= 0)  # prevents out of bounds to the north
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '|')  # wall behind opp pawn
-            and (self.board[dwnr][dwnc] == ' ')  # no blocked diagonal
-                and (self.board[lpnr][lpnc] == ' ')):  # free landing cell
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '|')  # wall behind opp pawn
+            and (board[dwnr][dwnc] == ' ')  # no blocked diagonal
+                and (board[lpnr][lpnc] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lpnr // 2, lpnc // 2)))
 
         return vertex
 
-    def f_west_diag_vt(self, row, col):
+    def f_west_diag_vt(self, row, col, board, opp):
 
         vertex = []
 
@@ -325,22 +324,22 @@ class Q_graph(Graph):
         dwnc = col - 2  # diagonal wall col to the north
 
         if((col > 2)  # prevents opp in the last row
-            and (lpsr <= len(self.board) - 1)  # prevents out of bounds to the south # noqa: E501
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '|')  # wall behind opp pawn
-            and (self.board[dwsr][dwsc] == ' ')  # no blocked diagonal
-                and (self.board[lpsr][lpsc] == ' ')):  # free landing cell
+            and (lpsr <= len(board) - 1)  # prevents out of bounds to the south # noqa: E501
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '|')  # wall behind opp pawn
+            and (board[dwsr][dwsc] == ' ')  # no blocked diagonal
+                and (board[lpsr][lpsc] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lpsr // 2, lpsc // 2)))
 
         if((col > 2)  # prevents opp in the last row
             and (lpnr >= 0)  # prevents out of bounds to the north
-            and (self.board[wr][wc] == ' ')  # no blocked cell
-            and (self.board[os_row][os_col] == self.opp)  # cel occupied by a opp pawn # noqa: E501
-            and (self.board[bow_row][bow_col] == '|')  # wall behind opp pawn
-            and (self.board[dwnr][dwnc] == ' ')  # no blocked diagonal
-                and (self.board[lpnr][lpnc] == ' ')):  # free landing cell
+            and (board[wr][wc] == ' ')  # no blocked cell
+            and (board[os_row][os_col] == opp)  # cel occupied by a opp pawn # noqa: E501
+            and (board[bow_row][bow_col] == '|')  # wall behind opp pawn
+            and (board[dwnr][dwnc] == ' ')  # no blocked diagonal
+                and (board[lpnr][lpnc] == ' ')):  # free landing cell
 
             vertex.append(((row // 2, col // 2), (lpnr // 2, lpnc // 2)))
 
