@@ -50,9 +50,10 @@ class Client:
                 request_data = json.loads(request)
 
                 if request_data['event'] == 'list_users':
-                    logging.info('connected users(UPDATE):')
-                    for i in range(len(request_data['data']['users'])):
-                        logging.info('*s%', request_data['data']['users'][i])
+                    # logging.info('connected users(UPDATE):')
+                    # for i in range(len(request_data['data']['users'])):
+                    #     print('*', request_data['data']['users'][i])
+                    pass
 
                 if request_data['event'] == 'gameover':
                     pass
@@ -61,7 +62,7 @@ class Client:
 
                     logging.info('challenged by ' + request_data['data']['opponent']) # noqa
 
-                    if request_data['data']['opponent'] == 'lgior':
+                    if request_data['data']['opponent'] != '':
                         await self.send(websocket,
                                         format_action_challenge(request_data))
                         logging.info('challenge accepted')
@@ -74,4 +75,4 @@ class Client:
                     await self.send(websocket, response)
 
             except Exception as e:
-                logging.exception(e, e.with_traceback)
+                print(e)

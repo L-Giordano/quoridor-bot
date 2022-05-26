@@ -1,4 +1,4 @@
-import logging
+
 import random
 import networkx as nx
 from networkx.exception import NodeNotFound
@@ -23,12 +23,10 @@ def calc_path(player):
                         list(nx.astar_path(
                             q_graph, player_pos[i], goal_pos[j], weight=1)))  # noqa: E501
 
-            except NodeNotFound as e:
-                logging.exception(e)
+            except NodeNotFound:
                 continue
 
-            except Exception as e:
-                logging.exception(e)
+            except Exception:
                 continue
 
     # in case there are not possible paths

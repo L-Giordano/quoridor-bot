@@ -1,4 +1,4 @@
-import logging
+
 import networkx as nx
 from networkx.exception import NetworkXError, NetworkXNoPath
 import copy
@@ -92,9 +92,9 @@ def remove_egde(opp_wall_graph, own_wall_graph, positions_data, edges_to_rm):
             opp_wall_graph.remove_edge(edges_to_rm[1][0], edges_to_rm[1][1])
             own_wall_graph.remove_edge(edges_to_rm[0][0], edges_to_rm[0][1])
             own_wall_graph.remove_edge(edges_to_rm[1][0], edges_to_rm[1][1])
-        except NetworkXError as e:
-            logging.exception(e)
-            pass
+        except NetworkXError:
+            print('error removing egde1')
+
         if verify_wall(opp_wall_graph, own_wall_graph, positions_data):
             return ((edges_to_rm[0], edges_to_rm[1]))
 
@@ -105,8 +105,8 @@ def remove_egde(opp_wall_graph, own_wall_graph, positions_data, edges_to_rm):
             own_wall_graph.add_edge(edges_to_rm[1][0], edges_to_rm[1][1])  # over roll # noqa: E501
             own_wall_graph.remove_edge(edges_to_rm[2][0], edges_to_rm[2][1])
 
-        except NetworkXError as e:
-            logging.exception(e)
+        except NetworkXError:
+            print('error removing egde2')
             return None
 
         if verify_wall(opp_wall_graph, own_wall_graph, positions_data):
